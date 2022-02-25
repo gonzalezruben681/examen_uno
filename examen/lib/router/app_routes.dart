@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:examen_uno/screens/inputs_screen.dart';
-import 'package:examen_uno/models/models.dart';
+import 'package:examen/screens/inputs_screen.dart';
+import 'package:examen/models/models.dart';
 
 class AppRoutes {
   static const initialRoute = 'home';

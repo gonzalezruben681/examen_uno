@@ -1,26 +1,33 @@
-import 'package:examen_uno/models/catalogo_model.dart';
-import 'package:examen_uno/provider/catalogo_provider.dart';
+import 'package:examen/provider/catalogo_provider.dart';
+import 'package:examen/provider/descripcion_provider.dart';
+import 'package:examen/provider/modelo_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:examen_uno/widgets/custom_input_field.dart';
+// import 'package:examen/widgets/custom_input_field.dart';
 import 'package:provider/provider.dart';
 
-class InputsScreen extends StatelessWidget {
+class InputsScreen extends StatefulWidget {
   const InputsScreen({Key? key}) : super(key: key);
+
+  @override
+  State<InputsScreen> createState() => _InputsScreenState();
+}
+
+class _InputsScreenState extends State<InputsScreen> {
+  String? _mySelection;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> myFormKey = GlobalKey<FormState>();
-    List<Catalogo> listaCatalogo = [];
-    final catalogo = Provider.of<CatalogoProvider>(context);
 
-    final Map<String, String> formValues = {
-      'dato1': 'datos',
-      'dato2': 'datos',
-      'dato3': 'ddatos',
-      'dato4': 'datos',
-      'dato5': 'datos'
-    };
-    
+    final catalogoProvider = Provider.of<CatalogoProvider>(context);
+    final modeloProvider = Provider.of<ModeloProvider>(context);
+    final descripcionProvider = Provider.of<DescripcionProvider>(context);
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Cotizar'),
@@ -28,93 +35,156 @@ class InputsScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Form(
-                key: myFormKey,
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () => catalogo.cotizar('19', 2, 'Submarca'),
-                      child: DropdownButtonFormField<String>(
-                          value: 'seleccione',
-                          items: listaCatalogo.map((item) {
-                            return DropdownMenuItem(
-                              child: Text(item.sSubMarca),
-                              value: item.iIdMostrar.toString(),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            print(value);
-                            formValues['role'] = value ?? 'Admin';
-                          }),
-                    ),
-                    const SizedBox(height: 10),
-                    DropdownButtonFormField<String>(
-                        value: 'dato2',
-                        items: listaCatalogo.map((item) {
+              child: Column(
+                children: [
+                  ///Marca
+                  DropdownButtonHideUnderline(
+                    child: ButtonTheme(
+                      alignedDropdown: true,
+                      child: DropdownButton<String>(
+                        value: catalogoProvider.mySelection,
+                        iconSize: 30,
+                        icon: (null),
+                        style: const TextStyle(
+                          color: Colors.black54,
+                          fontSize: 16,
+                        ),
+                        hint: const Text('Seleccione una marca'),
+                        items: catalogoProvider.onDisplayCatalogo.map((item) {
                           return DropdownMenuItem(
                             child: Text(item.sSubMarca),
-                            value: item.iIdMostrar.toString(),
+                            value: item.iIdSubMarca.toString(),
                           );
                         }).toList(),
-                        onChanged: (value) {
-                          print(value);
-                          formValues['role'] = value ?? 'Admin';
-                        }),
-                    const SizedBox(height: 10),
-                    DropdownButtonFormField<String>(
-                        value: 'dato2',
-                        items: const [
-                          DropdownMenuItem(
-                              value: 'dato1', child: Text('datos')),
-                          DropdownMenuItem(
-                              value: 'datos3', child: Text('datos1')),
-                          DropdownMenuItem(
-                              value: 'dato2', child: Text('datos2')),
-                          DropdownMenuItem(
-                              value: 'dato4', child: Text('datos3')),
-                        ],
-                        onChanged: (value) {
-                          print(value);
-                          formValues['role'] = value ?? 'Admin';
-                        }),
-                    const SizedBox(height: 30),
-                    CustomInputField(
-                        labelText: 'Código Postal',
-                        formProperty: 'codigo_postal',
-                        formValues: formValues),
-                    const SizedBox(height: 30),
-                    CustomInputField(
-                        labelText: 'Estado',
-                        formProperty: 'estado',
-                        formValues: formValues),
-                    const SizedBox(height: 30),
-                    CustomInputField(
-                        labelText: 'Municipio',
-                        formProperty: 'municipio',
-                        formValues: formValues),
-                    const SizedBox(height: 30),
-                    CustomInputField(
-                        labelText: 'Colonia',
-                        formProperty: 'colonia',
-                        formValues: formValues),
-                    const SizedBox(height: 30),
-                    ElevatedButton(
-                      child: const SizedBox(
-                          width: double.infinity,
-                          child: Center(child: const Text('Guardar'))),
-                      onPressed: () {
-                        FocusScope.of(context).requestFocus(FocusNode());
+                        onChanged: (newValue) {
+                          setState(() {
+                            catalogoProvider.mySelection = newValue ?? '';
+                            print(_mySelection);
+                            modeloProvider.cotizar(
+                                catalogoProvider.mySelection!, 2, 'Modelo');
+                          });
+                        },
+                      ),
+                    ),
+                  ),
 
-                        if (!myFormKey.currentState!.validate()) {
-                          print('Formulario no válido');
-                          return;
-                        }
-                        //* imprimir valores del formulario
-                        print(formValues);
-                      },
-                    )
-                  ],
-                ),
+                  // /// Modelo
+                  DropdownButtonHideUnderline(
+                    child: ButtonTheme(
+                      alignedDropdown: true,
+                      child: DropdownButton<String>(
+                        value: modeloProvider.mySelection,
+                        iconSize: 30,
+                        icon: (null),
+                        style: const TextStyle(
+                          color: Colors.black54,
+                          fontSize: 16,
+                        ),
+                        hint: const Text('Seleccione una modelo'),
+                        items: modeloProvider.onDisplayModelo.map((item) {
+                          return DropdownMenuItem(
+                            child: Text(item.sModelo),
+                            value: item.iIdModelo.toString(),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            modeloProvider.mySelection = newValue ?? '';
+                            print(_mySelection);
+                            descripcionProvider.cotizar(
+                                modeloProvider.mySelection!,
+                                2,
+                                'DescripcionModelo');
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+
+                  // /// Submarca
+                  // DropdownButtonHideUnderline(
+                  //   child: ButtonTheme(
+                  //     alignedDropdown: true,
+                  //     child: DropdownButton<String>(
+                  //       value: _mySelection,
+                  //       iconSize: 30,
+                  //       icon: (null),
+                  //       style: const TextStyle(
+                  //         color: Colors.black54,
+                  //         fontSize: 16,
+                  //       ),
+                  //       hint: const Text('Seleccione un modelo'),
+                  //       items: catalogoProvider.onDisplayCatalogo.map((item) {
+                  //         return DropdownMenuItem(
+                  //           child: Text(item.sSubMarca),
+                  //           value: item.iIdSubMarca.toString(),
+                  //         );
+                  //       }).toList(),
+                  //       onChanged: (newValue) {
+                  //         setState(() {
+                  //           _mySelection = newValue ?? '';
+                  //           print(_mySelection);
+                  //           catalogoProvider.cotizar(
+                  //               _mySelection!, 2, 'DescripcionModelo');
+                  //         });
+                  //       },
+                  //     ),
+                  //   ),
+                  // ),
+
+                  // /// Descripción
+                  DropdownButtonHideUnderline(
+                    child: ButtonTheme(
+                      alignedDropdown: true,
+                      child: DropdownButton<String>(
+                        value: descripcionProvider.mySelection,
+                        iconSize: 30,
+                        icon: (null),
+                        style: const TextStyle(
+                          color: Colors.black54,
+                          fontSize: 16,
+                        ),
+                        hint: const Text('Seleccione un descripción'),
+                        items: descripcionProvider.onDisplayDescripcion
+                            .map((item) {
+                          return DropdownMenuItem(
+                            child: Text(item.sDescripcion),
+                            value: item.iIdDescripcionModelo.toString(),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            descripcionProvider.mySelection = newValue ?? '';
+                            print(descripcionProvider.mySelection);
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+
+                  Form(
+                    key: myFormKey,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          child: const SizedBox(
+                              width: double.infinity,
+                              child: Center(child: Text('Guardar'))),
+                          onPressed: () {
+                            FocusScope.of(context).requestFocus(FocusNode());
+
+                            if (!myFormKey.currentState!.validate()) {
+                              print('Formulario no válido');
+                              return;
+                            }
+                            catalogoProvider.cotizar('19', 2, 'Submarca');
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               )),
         ));
   }
