@@ -1,47 +1,47 @@
 // To parse this JSON data, do
 //
-//     final catalogos = catalogosFromMap(jsonString);
+//     final SubMarcas = SubMarcasFromMap(jsonString);
 
 import 'dart:convert';
 
-import 'package:examen/models/catalogo_model.dart';
+import 'package:examen/models/SubMarca_model.dart';
 
-// class Catalogos {
-//   Catalogos({
-//     required this.catalogoJsonString,
+// class SubMarcas {
+//   SubMarcas({
+//     required this.SubMarcaJsonString,
 //     this.error,
 //   });
 
-//   List<Catalogo> catalogoJsonString;
+//   List<SubMarca> SubMarcaJsonString;
 //   dynamic error;
 
-//   factory Catalogos.fromJson(String str) => Catalogos.fromMap(json.decode(str));
+//   factory SubMarcas.fromJson(String str) => SubMarcas.fromMap(json.decode(str));
 
 //   String toJson() => json.encode(toMap());
 
-//   factory Catalogos.fromMap(Map<String, dynamic> json) => Catalogos(
-//         catalogoJsonString: List<Catalogo>.from(json["CatalogoJsonString"]
-//             .map<Catalogo>((x) => Catalogo.fromMap(x))),
+//   factory SubMarcas.fromMap(Map<String, dynamic> json) => SubMarcas(
+//         SubMarcaJsonString: List<SubMarca>.from(json["SubMarcaJsonString"]
+//             .map<SubMarca>((x) => SubMarca.fromMap(x))),
 //         error: json["Error"],
 //       );
 
 //   Map<String, dynamic> toMap() => {
-//         "CatalogoJsonString":
-//             List<dynamic>.from(catalogoJsonString.map((x) => x.toMap())),
+//         "SubMarcaJsonString":
+//             List<dynamic>.from(SubMarcaJsonString.map((x) => x.toMap())),
 //         "Error": error,
 //       };
 // }
 
 // import 'dart:convert';
 
-List<Catalogo> catalogoFromJson(String str) =>
-    List<Catalogo>.from(json.decode(str).map((x) => Catalogo.fromJson(x)));
+List<SubMarca> subMarcaFromJson(String str) =>
+    List<SubMarca>.from(json.decode(str).map((x) => SubMarca.fromJson(x)));
 
-String catalogoToJson(List<Catalogo> data) =>
+String subMarcaToJson(List<SubMarca> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class Catalogo {
-  Catalogo({
+class SubMarca {
+  SubMarca({
     required this.iIdSubMarca,
     required this.iIdMarcaSubramo,
     required this.iIdMostrar,
@@ -53,7 +53,7 @@ class Catalogo {
   int iIdMostrar;
   String sSubMarca;
 
-  factory Catalogo.fromJson(Map<String, dynamic> json) => Catalogo(
+  factory SubMarca.fromJson(Map<String, dynamic> json) => SubMarca(
         iIdSubMarca: json["iIdSubMarca"],
         iIdMarcaSubramo: json["iIdMarcaSubramo"],
         iIdMostrar: json["iIdMostrar"],

@@ -1,18 +1,24 @@
 import 'dart:convert';
 
-class Descripciones {
-  List<Descripcion> items = [];
+List<Descripcion> descripcionFromJson(String str) =>
+    List<Descripcion>.from(json.decode(str).map((x) => Descripcion.fromMap(x)));
 
-  Descripciones();
+String descripcionToJson(List<Descripcion> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toMap())));
 
-//aqui va recibir el mapa de todas  las respuestas
-  Descripciones.fromJsonList(List<dynamic> jsonList) {
-    for (var item in jsonList) {
-      final modelo = Descripcion.fromMap(item);
-      items.add(modelo);
-    }
-  }
-}
+// class Descripciones {
+//   List<Descripcion> items = [];
+
+//   Descripciones();
+
+// //aqui va recibir el mapa de todas  las respuestas
+//   Descripciones.fromJsonList(List<dynamic> jsonList) {
+//     for (var item in jsonList) {
+//       final modelo = Descripcion.fromMap(item);
+//       items.add(modelo);
+//     }
+//   }
+// }
 
 class Descripcion {
   Descripcion({
@@ -26,11 +32,6 @@ class Descripcion {
   int iIdModeloSubmarca;
   int iIdMostrar;
   String sDescripcion;
-
-  factory Descripcion.fromJson(String str) =>
-      Descripcion.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
 
   factory Descripcion.fromMap(Map<String, dynamic> json) => Descripcion(
         iIdDescripcionModelo: json["iIdDescripcionModelo"],

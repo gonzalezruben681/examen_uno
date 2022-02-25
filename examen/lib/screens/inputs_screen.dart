@@ -1,6 +1,4 @@
 import 'package:examen/provider/catalogo_provider.dart';
-import 'package:examen/provider/descripcion_provider.dart';
-import 'package:examen/provider/modelo_provider.dart';
 import 'package:flutter/material.dart';
 // import 'package:examen/widgets/custom_input_field.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +12,9 @@ class InputsScreen extends StatefulWidget {
 
 class _InputsScreenState extends State<InputsScreen> {
   String? _mySelection;
+  String? _mySelection2;
+  String? _mySelection3;
+  String? _mySelection4;
 
   @override
   void initState() {
@@ -25,8 +26,6 @@ class _InputsScreenState extends State<InputsScreen> {
     final GlobalKey<FormState> myFormKey = GlobalKey<FormState>();
 
     final catalogoProvider = Provider.of<CatalogoProvider>(context);
-    final modeloProvider = Provider.of<ModeloProvider>(context);
-    final descripcionProvider = Provider.of<DescripcionProvider>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -42,14 +41,45 @@ class _InputsScreenState extends State<InputsScreen> {
                     child: ButtonTheme(
                       alignedDropdown: true,
                       child: DropdownButton<String>(
-                        value: catalogoProvider.mySelection,
+                        value: _mySelection,
                         iconSize: 30,
                         icon: (null),
                         style: const TextStyle(
                           color: Colors.black54,
                           fontSize: 16,
                         ),
-                        hint: const Text('Seleccione una marca'),
+                        hint: const Text('Seleccione un marca'),
+                        items: catalogoProvider.onDisplayMarca.map((item) {
+                          return DropdownMenuItem(
+                            child: Text(item.sMarca),
+                            value: item.iIdMarca.toString(),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            _mySelection = newValue ?? '';
+                            print(_mySelection);
+                            catalogoProvider.cotizar(
+                                _mySelection!, 2, 'Submarca');
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+
+                  /// Submarca
+                  DropdownButtonHideUnderline(
+                    child: ButtonTheme(
+                      alignedDropdown: true,
+                      child: DropdownButton<String>(
+                        value: _mySelection2,
+                        iconSize: 30,
+                        icon: (null),
+                        style: const TextStyle(
+                          color: Colors.black54,
+                          fontSize: 16,
+                        ),
+                        hint: const Text('Seleccione una submarca'),
                         items: catalogoProvider.onDisplayCatalogo.map((item) {
                           return DropdownMenuItem(
                             child: Text(item.sSubMarca),
@@ -58,22 +88,22 @@ class _InputsScreenState extends State<InputsScreen> {
                         }).toList(),
                         onChanged: (newValue) {
                           setState(() {
-                            catalogoProvider.mySelection = newValue ?? '';
-                            print(_mySelection);
-                            modeloProvider.cotizar(
-                                catalogoProvider.mySelection!, 2, 'Modelo');
+                            _mySelection2 = newValue ?? '';
+
+                            catalogoProvider.cotizar(
+                                _mySelection2!, 2, 'Modelo');
                           });
                         },
                       ),
                     ),
                   ),
 
-                  // /// Modelo
+                  /// Modelo
                   DropdownButtonHideUnderline(
                     child: ButtonTheme(
                       alignedDropdown: true,
                       child: DropdownButton<String>(
-                        value: modeloProvider.mySelection,
+                        value: _mySelection3,
                         iconSize: 30,
                         icon: (null),
                         style: const TextStyle(
@@ -81,7 +111,7 @@ class _InputsScreenState extends State<InputsScreen> {
                           fontSize: 16,
                         ),
                         hint: const Text('Seleccione una modelo'),
-                        items: modeloProvider.onDisplayModelo.map((item) {
+                        items: catalogoProvider.onDisplayModelo.map((item) {
                           return DropdownMenuItem(
                             child: Text(item.sModelo),
                             value: item.iIdModelo.toString(),
@@ -89,55 +119,22 @@ class _InputsScreenState extends State<InputsScreen> {
                         }).toList(),
                         onChanged: (newValue) {
                           setState(() {
-                            modeloProvider.mySelection = newValue ?? '';
+                            _mySelection3 = newValue ?? '';
                             print(_mySelection);
-                            descripcionProvider.cotizar(
-                                modeloProvider.mySelection!,
-                                2,
-                                'DescripcionModelo');
+                            catalogoProvider.cotizar(
+                                _mySelection3!, 2, 'DescripcionModelo');
                           });
                         },
                       ),
                     ),
                   ),
 
-                  // /// Submarca
-                  // DropdownButtonHideUnderline(
-                  //   child: ButtonTheme(
-                  //     alignedDropdown: true,
-                  //     child: DropdownButton<String>(
-                  //       value: _mySelection,
-                  //       iconSize: 30,
-                  //       icon: (null),
-                  //       style: const TextStyle(
-                  //         color: Colors.black54,
-                  //         fontSize: 16,
-                  //       ),
-                  //       hint: const Text('Seleccione un modelo'),
-                  //       items: catalogoProvider.onDisplayCatalogo.map((item) {
-                  //         return DropdownMenuItem(
-                  //           child: Text(item.sSubMarca),
-                  //           value: item.iIdSubMarca.toString(),
-                  //         );
-                  //       }).toList(),
-                  //       onChanged: (newValue) {
-                  //         setState(() {
-                  //           _mySelection = newValue ?? '';
-                  //           print(_mySelection);
-                  //           catalogoProvider.cotizar(
-                  //               _mySelection!, 2, 'DescripcionModelo');
-                  //         });
-                  //       },
-                  //     ),
-                  //   ),
-                  // ),
-
-                  // /// Descripción
+                  /// Descripción
                   DropdownButtonHideUnderline(
                     child: ButtonTheme(
                       alignedDropdown: true,
                       child: DropdownButton<String>(
-                        value: descripcionProvider.mySelection,
+                        value: _mySelection4,
                         iconSize: 30,
                         icon: (null),
                         style: const TextStyle(
@@ -145,8 +142,8 @@ class _InputsScreenState extends State<InputsScreen> {
                           fontSize: 16,
                         ),
                         hint: const Text('Seleccione un descripción'),
-                        items: descripcionProvider.onDisplayDescripcion
-                            .map((item) {
+                        items:
+                            catalogoProvider.onDisplayDescripcion.map((item) {
                           return DropdownMenuItem(
                             child: Text(item.sDescripcion),
                             value: item.iIdDescripcionModelo.toString(),
@@ -154,8 +151,8 @@ class _InputsScreenState extends State<InputsScreen> {
                         }).toList(),
                         onChanged: (newValue) {
                           setState(() {
-                            descripcionProvider.mySelection = newValue ?? '';
-                            print(descripcionProvider.mySelection);
+                            _mySelection4 = newValue ?? '';
+                            print(catalogoProvider.mySelection);
                           });
                         },
                       ),
@@ -178,7 +175,7 @@ class _InputsScreenState extends State<InputsScreen> {
                               print('Formulario no válido');
                               return;
                             }
-                            catalogoProvider.cotizar('19', 2, 'Submarca');
+                            catalogoProvider.cotizar('1', 2, 'Marca');
                           },
                         )
                       ],

@@ -1,6 +1,4 @@
 import 'package:examen/provider/catalogo_provider.dart';
-import 'package:examen/provider/descripcion_provider.dart';
-import 'package:examen/provider/modelo_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:examen/theme/app_theme.dart';
@@ -20,14 +18,6 @@ class AppState extends StatelessWidget {
           create: (context) => CatalogoProvider(),
           lazy: false,
         ),
-        ChangeNotifierProvider(
-          create: (context) => ModeloProvider(),
-          lazy: false,
-        ),
-        ChangeNotifierProvider(
-          create: (context) => DescripcionProvider(),
-          lazy: false,
-        )
       ],
       child: const MyApp(),
     );

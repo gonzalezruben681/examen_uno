@@ -4,20 +4,25 @@
 
 import 'dart:convert';
 
-class Modelos {
-  List<Modelo> items = [];
+List<Modelo> modeloFromMap(String str) =>
+    List<Modelo>.from(json.decode(str).map((x) => Modelo.fromMap(x)));
 
-  Modelos();
+String marcaToJson(List<Modelo> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+// class Modelos {
+//   List<Modelo> items = [];
 
-//aqui va recibir el mapa de todas  las respuestas
-  Modelos.fromJsonList(List<dynamic> jsonList) {
-    for (var item in jsonList) {
-      final modelo = Modelo.fromMap(
-          item); 
-      items.add(modelo);
-    }
-  }
-}
+//   Modelos();
+
+// //aqui va recibir el mapa de todas  las respuestas
+//   Modelos.fromJsonList(List<dynamic> jsonList) {
+//     for (var item in jsonList) {
+//       final modelo = Modelo.fromMap(
+//           item); 
+//       items.add(modelo);
+//     }
+//   }
+// }
 
 class Modelo {
   Modelo({
