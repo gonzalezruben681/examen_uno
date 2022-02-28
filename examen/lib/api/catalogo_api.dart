@@ -7,6 +7,8 @@ class CatalogoApi {
   static Future post(String path, Map<String, dynamic> data) async {
     _dio.options.baseUrl = "https://apitestcotizamatico.azurewebsites.net/api";
 
+  
+
     try {
       final resp = await _dio.post(path, data: json.encode(data));
       // return resp.data['CatalogoJsonString'];

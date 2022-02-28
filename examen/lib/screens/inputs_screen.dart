@@ -26,6 +26,9 @@ class _InputsScreenState extends State<InputsScreen> {
     final GlobalKey<FormState> myFormKey = GlobalKey<FormState>();
 
     final catalogoProvider = Provider.of<CatalogoProvider>(context);
+    setState(() {
+      catalogoProvider.cotizar('1', 2, 'Marca');
+    });
 
     return Scaffold(
         appBar: AppBar(
@@ -167,7 +170,7 @@ class _InputsScreenState extends State<InputsScreen> {
                         ElevatedButton(
                           child: const SizedBox(
                               width: double.infinity,
-                              child: Center(child: Text('Guardar'))),
+                              child: Center(child: Text('Cotizar'))),
                           onPressed: () {
                             FocusScope.of(context).requestFocus(FocusNode());
 
@@ -175,7 +178,7 @@ class _InputsScreenState extends State<InputsScreen> {
                               print('Formulario no válido');
                               return;
                             }
-                            catalogoProvider.cotizar('1', 2, 'Marca');
+                           // catalogoProvider.cotizar('1', 2, 'Marca');
                           },
                         )
                       ],
